@@ -1,16 +1,8 @@
-const Joi = require('joi');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const {Teacher , validate} = require('../model/teacher');
 
-const Teacher = mongoose.model('Teacher', new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 50
-  }
-}));
 
 router.get('/', async (req, res) => {
   const teachers = await Teacher.find().sort('name');
@@ -18,7 +10,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { error } = validateTeacher(req.body); 
+  const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
   let teacher = new Teacher({ name: req.body.name });
@@ -28,7 +20,7 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const { error } = validateTeacher(req.body); 
+  const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
   const teacher = await Teacher.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
@@ -55,13 +47,5 @@ router.get('/:id', async (req, res) => {
 
   res.send(teacher);
 });
-
-function validateTeacher(teacher) {
-  const schema = {
-    name: Joi.string().min(3).max(50).required()
-  };
-
-  return Joi.validate(teacher, schema);
-}
 
 module.exports = router;
