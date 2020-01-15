@@ -9,6 +9,18 @@ const Student = mongoose.model('Student', new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 50
+  },
+  track: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 50
+  },
+  internCompanyName: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 50
   }
 }));
 
@@ -21,7 +33,11 @@ router.post('/', async (req, res) => {
   const { error } = validateStudent(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
-  let student = new Student({ name: req.body.name });
+  let student = new Student({ 
+    name: req.body.name,
+    track: req.body.track,
+    internCompanyName: req.body.internCompanyName
+   });
   student = await student.save();
   
   res.send(student);
@@ -31,7 +47,11 @@ router.put('/:id', async (req, res) => {
   const { error } = validateStudent(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
-  const student = await Student.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
+  const student = await Student.findByIdAndUpdate(req.params.id, { 
+    name: req.body.name,
+    track: req.body.track,
+    internCompanyName: req.body.internCompanyName
+   }, {
     new: true
   });
 
@@ -58,7 +78,9 @@ router.get('/:id', async (req, res) => {
 
 function validateStudent(student) {
   const schema = {
-    name: Joi.string().min(3).required()
+    name: Joi.string().min(3).max(50).required(),
+    track : Joi.string().min(3).max(50).required(),
+    internCompanyName : Joi.string().min(3).max(50).required()
   };
 
   return Joi.validate(student, schema);

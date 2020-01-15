@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const students = require('./routes/students');
+const teachers = require('./routes/teachers');
 const express = require('express');
 const app = express();
 
@@ -10,6 +11,7 @@ useUnifiedTopology: true })
 
 app.use(express.json());
 app.use('/api/students', students);
+app.use('/api/teachers', teachers);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
