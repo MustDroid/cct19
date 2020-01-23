@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
-  let teacher = new Teacher({ name: req.body.name });
+  const teacher = new Teacher({ name: req.body.name });
   teacher = await teacher.save();
   
   res.send(teacher);

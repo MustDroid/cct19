@@ -25,7 +25,7 @@ const Student = mongoose.model('Student', new mongoose.Schema({
   function validateStudent(student) {
     const schema = {
       name: Joi.string().min(3).max(50).required(),
-      track : Joi.string().min(3).max(50).required(),
+      track : Joi.string().min(2).max(50).required(),
       internCompanyName : Joi.string().min(3).max(50).required()
     };
   
